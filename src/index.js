@@ -38,7 +38,24 @@ const MORSE_TABLE = {
 };
 
 function decode(expr) {
-    // write your solution here
+    // Используем match(/.{1,10}/g), чтобы разбить строку на части по 10 символов
+    const morseChunks = expr.match(/.{1,10}/g);
+    
+    // Декодируем каждую группу
+    const decodedMessage = morseChunks.map(chunk => {
+        // Если часть равна **********, это означает пробел, и мы возвращаем пробел
+        if (chunk === '**********') {
+            return ' ';
+        }
+
+        // Заменяем 00 на пустую строку, 10 на точку, а 11 на тире
+        let morseCode = chunk.replace(/00/g, '').replace(/10/g, '.').replace(/11/g, '-');
+        
+        // Используем MORSE_TABLE для получения соответствующей буквы
+        return MORSE_TABLE[morseCode] || '';
+    }).join('');
+
+    return decodedMessage;
 }
 
 module.exports = {
